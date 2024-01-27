@@ -12,6 +12,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
@@ -28,10 +29,15 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 
 class ListViewModel : ViewModel() {
     val enteredText = mutableStateListOf<String>()
@@ -42,6 +48,13 @@ class ListViewModel : ViewModel() {
 
     fun removeItem(text: String) {
         enteredText.remove(text)
+    }
+
+    fun updateItem(originalText: String, editedText: String) {
+        val index = enteredText.indexOf(originalText)
+        if (index != -1) {
+            enteredText[index] = editedText
+        }
     }
 }
 
@@ -65,7 +78,9 @@ fun TestTextField(
     navigateToDetailScreen: (String) -> Unit,
     listViewModel: ListViewModel
 ) {
+
     var myValue by remember { mutableStateOf("") }
+
     Row(
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier.padding(horizontal = 10.dp)
@@ -86,10 +101,10 @@ fun TestTextField(
             onClick = {
                 listViewModel.addItem(myValue)
                 myValue = ""
-            }, colors = ButtonDefaults.buttonColors(Color.Black),
+            }, colors = ButtonDefaults.buttonColors(Color.LightGray),
             modifier = Modifier.padding(start = 10.dp)
         ) {
-            Text(text = "Add", color = Color.Red)
+            Text(text = "Add", color = Color.Black)
         }
     }
     Spacer(modifier = Modifier.height(16.dp))
@@ -97,22 +112,34 @@ fun TestTextField(
         items(listViewModel.enteredText) { text ->
             Card(
                 modifier = Modifier
-                    .clickable { navigateToDetailScreen(text) }
+                    //.clickable { navigateToDetailScreen(text) }
                     .padding(8.dp)
                     .fillMaxWidth()
             ) {
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
-                    modifier = Modifier.padding(5.dp)
+                    modifier = Modifier.padding(8.dp)
                 ) {
                     Text(
                         text = text,
                         fontSize = 20.sp,
-                        modifier = Modifier.weight(1f)
+                        modifier = Modifier
+                            .weight(1f)
+                            .padding(horizontal = 8.dp),
+
                     )
                     Spacer(modifier = Modifier.width(8.dp))
+                    IconButton(onClick = { navigateToDetailScreen(text) }) {
+                        Icon(
+                            Icons.Default.Edit,
+                            contentDescription = "Edit"
+                        )
+                    }
                     IconButton(onClick = { listViewModel.removeItem(text) }) {
-                        Icon(Icons.Default.Delete, contentDescription = "Delete")
+                        Icon(
+                            Icons.Default.Delete,
+                            contentDescription = "Delete"
+                            )
                     }
                 }
             }
@@ -128,8 +155,11 @@ fun Header() {
     ) {
         Text(
             text = "List",
-            fontSize = 32.sp,
+            fontSize = 36.sp,
             color = Color.Black,
+            fontStyle = FontStyle.Italic,
+            fontFamily = FontFamily.Serif,
+            fontWeight = FontWeight.W900
         )
     }
 }

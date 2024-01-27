@@ -2,6 +2,7 @@ package com.example.testtest.ui.navigation
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
@@ -10,6 +11,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.example.testtest.site.DetailScreen
 import com.example.testtest.site.ListScreen
+import com.example.testtest.site.ListViewModel
 
 object MainDestinations {
     const val LIST_SCREEN = "ListScreen"
@@ -25,19 +27,24 @@ class Actions(navController: NavHostController) {
 @Composable
 fun SetupNavigation() {
     val navController = rememberNavController()
+    val listViewModel: ListViewModel = viewModel()
 
     val actions = remember(navController) { Actions(navController) }
 
     NavHost(navController, startDestination = MainDestinations.LIST_SCREEN) {
         composable(MainDestinations.LIST_SCREEN) {
-            ListScreen(actions.navigateToDetailScreen)
+            ListScreen(actions.navigateToDetailScreen, listViewModel)
         }
         composable(
             "${MainDestinations.DETAIL_SCREEN}/{text}",
             arguments = listOf(navArgument("text") { type = NavType.StringType })
         ) { backStackEntry ->
             val text = backStackEntry.arguments?.getString("text")
-            text?.let { DetailScreen(navController, it) }
+            text?.let { DetailScreen(navController, it){ editedText ->
+                // Callback to handle edited text and update list
+                listViewModel.updateItem(text, editedText)
+                navController.popBackStack()
+            } }
         }
     }
 }
