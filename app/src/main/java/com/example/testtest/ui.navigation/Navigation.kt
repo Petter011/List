@@ -9,9 +9,9 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
-import com.example.testtest.site.DetailScreen
-import com.example.testtest.site.ListScreen
-import com.example.testtest.site.ListViewModel
+import com.example.testtest.Screens.DetailScreen
+import com.example.testtest.Screens.ListScreen
+import com.example.testtest.Screens.ListViewModel
 
 object MainDestinations {
     const val LIST_SCREEN = "ListScreen"
