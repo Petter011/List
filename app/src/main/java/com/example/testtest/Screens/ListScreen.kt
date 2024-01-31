@@ -2,10 +2,11 @@ package com.example.testtest.Screens
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -14,11 +15,11 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material3.BottomSheetDefaults
-import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -39,8 +40,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shadow
 import androidx.compose.ui.text.TextStyle
@@ -72,7 +73,6 @@ class ListViewModel : ViewModel() {
 
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ListScreen(
     navigateToDetailScreen: (String) -> Unit,
@@ -86,23 +86,32 @@ fun ListScreen(
             showSheet = false
         })
     }
-    val customBlue = Color(0xFFbbe9fa)
 
     Scaffold(
-
         floatingActionButton = {
             FloatingActionButton(onClick = { showSheet = true }) {
                 Icon(Icons.Rounded.Add, contentDescription = "Add")
             }
         }
     ) {
-        Column(
-            modifier = Modifier.background(customBlue),
-            horizontalAlignment = Alignment.CenterHorizontally
+        Box(
+            modifier = Modifier.fillMaxSize()
         ) {
-            Header()
-            HorizontalDivider()
-            ListView(navigateToDetailScreen, listViewModel)
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(brush = Brush.verticalGradient(listOf(Color.Magenta, Color.Cyan)))
+            )
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(16.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Header(text = "It's a List")
+                HorizontalDivider(thickness = 2.dp, color = Color.Black)
+                ListView(navigateToDetailScreen, listViewModel)
+            }
         }
     }
 }
@@ -166,14 +175,14 @@ fun ListView(
 }
 
 @Composable
-fun Header() {
+fun Header(text: String) {
     val offset = Offset(5.0f, 10.0f)
     Column(
         modifier = Modifier
             .padding(vertical = 20.dp)
     ) {
         Text(
-            text = "This is a List",
+            text = text,
             style = TextStyle(
                 fontSize = 36.sp,
                 color = Color.Black,
@@ -198,7 +207,6 @@ fun BottomSheet(onDismiss: () -> Unit, onTextAdded: (String) -> Unit) {
         onDismissRequest = { onDismiss() },
         sheetState = modalBottomSheetState,
         dragHandle = { BottomSheetDefaults.DragHandle() },
-        modifier = Modifier.fillMaxHeight()
     ) {
         AddStuff(onTextAdded, myText) { newText ->
             myText = newText
@@ -212,34 +220,39 @@ fun AddStuff(
     myText: String,
     onTextChanged: (String) -> Unit
 ) {
-
-    Column {
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.padding(horizontal = 10.dp)
-        ) {
-            OutlinedTextField(
-                value = myText,
-                onValueChange = onTextChanged,
-                label = { Text(text = "Write here") },
-                modifier = Modifier
-                    .weight(1f)
-                    .padding(vertical = 20.dp)
-            )
-            Spacer(modifier = Modifier.width(8.dp))
-            Button(
-                modifier = Modifier
-                    .shadow(4.dp, RoundedCornerShape(12.dp))
-                    .height(36.dp),
-                onClick = {
+    Column(
+        modifier = Modifier
+            .padding(vertical = 50.dp)
+    ) {
+        OutlinedTextField(
+            value = myText,
+            onValueChange = onTextChanged,
+            label = { Text(text = "Write here") },
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 25.dp),
+            shape = RoundedCornerShape(20.dp)
+        )
+    }
+    Box(
+        contentAlignment = Alignment.BottomEnd,
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 20.dp)
+            .padding(vertical = 20.dp)
+    ) {
+        FloatingActionButton(
+            onClick = {
+                if (myText.isNotBlank()) {
                     onTextAdded(myText)
-                    onTextChanged("")
                 }
-            ) {
-                Text(text = "Add")
             }
+        ) {
+            Icon(Icons.Filled.Add, "Floating action button.")
         }
     }
 }
+
+
 
 
