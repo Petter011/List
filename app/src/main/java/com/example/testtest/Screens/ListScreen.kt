@@ -19,6 +19,7 @@ import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.rounded.Add
+import androidx.compose.material.icons.rounded.Edit
 import androidx.compose.material3.BottomSheetDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -79,6 +80,7 @@ fun ListScreen(
     listViewModel: ListViewModel = viewModel()
 ) {
     var showSheet by remember { mutableStateOf(false) }
+    var headerText by remember { mutableStateOf("Create a List") }
 
     if (showSheet) {
         BottomSheet(onDismiss = { showSheet = false }, onTextAdded = { newText ->
@@ -90,12 +92,12 @@ fun ListScreen(
     Scaffold(
         floatingActionButton = {
             FloatingActionButton(onClick = { showSheet = true }) {
-                Icon(Icons.Rounded.Add, contentDescription = "Add")
+                Icon(Icons.Rounded.Edit, contentDescription = "Edit")
             }
         }
     ) {
         Box(
-            modifier = Modifier.fillMaxSize()
+            //modifier = Modifier.fillMaxSize()
         ) {
             Box(
                 modifier = Modifier
@@ -108,9 +110,16 @@ fun ListScreen(
                     .padding(16.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Header(text = "It's a List")
+                Header(text = headerText)
                 HorizontalDivider(thickness = 2.dp, color = Color.Black)
-                ListView(navigateToDetailScreen, listViewModel)
+                ListView(
+                    navigateToDetailScreen = navigateToDetailScreen,
+                    listViewModel = listViewModel,
+                    onFirstItemAdded = {
+                        // Update the header text when the first item is added
+                        headerText = "It's a List"
+                    }
+                )
             }
         }
     }
@@ -120,7 +129,9 @@ fun ListScreen(
 @Composable
 fun ListView(
     navigateToDetailScreen: (String) -> Unit,
-    listViewModel: ListViewModel
+    listViewModel: ListViewModel,
+    onFirstItemAdded: () -> Unit // Callback for the first item added
+
 ) {
     Column {
         Spacer(modifier = Modifier.height(20.dp))
@@ -171,6 +182,10 @@ fun ListView(
                 }
             }
         }
+    }
+    // Check if the list is empty and if it's the first item being added
+    if (listViewModel.enteredText.isNotEmpty() && listViewModel.enteredText.size == 1) {
+        onFirstItemAdded()
     }
 }
 

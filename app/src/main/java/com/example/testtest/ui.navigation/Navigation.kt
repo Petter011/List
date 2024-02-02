@@ -10,6 +10,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.example.testtest.Screens.DetailScreen
+import com.example.testtest.Screens.DrinkScreen
 import com.example.testtest.Screens.ListScreen
 import com.example.testtest.Screens.ListViewModel
 import com.example.testtest.Screens.StartScreen
@@ -18,6 +19,7 @@ object MainDestinations {
     const val LIST_SCREEN = "ListScreen"
     const val DETAIL_SCREEN = "DetailScreen"
     const val START_SCREEN = "StartScreen"
+    const val DRINK_SCREEN = "DrinkScreen"
 }
 
 class Actions(navController: NavHostController) {
@@ -38,6 +40,10 @@ class Actions(navController: NavHostController) {
     val navigateToListScreen: () -> Unit = {
         navController.navigate(MainDestinations.LIST_SCREEN)
     }
+
+    val navigateToDrinkScreen: () -> Unit = {
+        navController.navigate(MainDestinations.DRINK_SCREEN)
+    }
 }
 
 @Composable
@@ -48,12 +54,19 @@ fun SetupNavigation() {
     val actions = remember(navController) { Actions(navController) }
 
     NavHost(navController, startDestination = MainDestinations.START_SCREEN) {
+
         composable(MainDestinations.START_SCREEN) {
-            StartScreen(actions.navigateToListScreen)
+            StartScreen(actions.navigateToListScreen, actions.navigateToDrinkScreen)
         }
+
         composable(MainDestinations.LIST_SCREEN) {
             ListScreen(actions.navigateToDetailScreen, listViewModel)
         }
+
+        composable(MainDestinations.DRINK_SCREEN){
+            DrinkScreen()
+        }
+
         composable(
             "${MainDestinations.DETAIL_SCREEN}/{text}",
             arguments = listOf(navArgument("text") { type = NavType.StringType })

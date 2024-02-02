@@ -71,6 +71,12 @@ dependencies {
     debugImplementation("androidx.compose.ui:ui-tooling")
     debugImplementation("androidx.compose.ui:ui-test-manifest")
     implementation ("androidx.compose.material3:material3:1.2.0-rc01")
+    implementation("com.squareup.okhttp3:okhttp:4.12.0")
+    implementation ("androidx.lifecycle:lifecycle-viewmodel-compose:2.7.0")
+    implementation ("com.google.code.gson:gson:2.10")
+
+
+
 
 
     val nav_version = "2.7.6"
