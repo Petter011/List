@@ -1,4 +1,4 @@
-package com.example.testtest.Screens
+package com.example.testtest.screens
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
@@ -21,16 +21,26 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Shadow
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontStyle
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.testtest.help_api.Header
 
 
 @Composable
-fun StartScreen(navigateToListScreen: () -> Unit, navigateToDrinkScreen: () -> Unit) {
+fun StartScreen(
+    navigateToListScreen: () -> Unit,
+    navigateToDrinkScreen: () -> Unit,
+    navigateToSnakeScreen: () -> Unit
+) {
 
     Box(
         //modifier = Modifier.fillMaxSize()
@@ -49,16 +59,19 @@ fun StartScreen(navigateToListScreen: () -> Unit, navigateToDrinkScreen: () -> U
             Header(text = "Welcome")
             HorizontalDivider(thickness = 2.dp, color = Color.Black)
         }
-        ButtonLayout(navigateToListScreen = navigateToListScreen, navigateToDrinkScreen = navigateToDrinkScreen)
+        ButtonLayout(
+            navigateToListScreen = navigateToListScreen,
+            navigateToDrinkScreen = navigateToDrinkScreen,
+            navigateToSnakeScreen = navigateToSnakeScreen
+        )
     }
 }
-
-
 
 @Composable
 fun ButtonLayout(
     navigateToListScreen: () -> Unit,
-    navigateToDrinkScreen: () -> Unit
+    navigateToDrinkScreen: () -> Unit,
+    navigateToSnakeScreen: () -> Unit,
 ){
     Row(
         modifier = Modifier
@@ -69,31 +82,34 @@ fun ButtonLayout(
     ) {
         StartButtons(text = "Create a list", navigateToListScreen)
         Spacer(modifier = Modifier.width(30.dp))
-        StartButtons(text = "Drink recipe", navigateToDrinkScreen)
+        StartButtons(
+            text = "Cocktail recipes",
+            navigateToDrinkScreen
+        )
     }
     Row(
         modifier = Modifier
             .fillMaxSize()
-            .padding(top = 50.dp),
+            .padding(top = 80.dp),
 
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Center
     ) {
-        StartButtons(text = "Hej", navigateToListScreen)
+        StartButtons(text = "Snake", navigateToSnakeScreen)
         Spacer(modifier = Modifier.width(30.dp))
-        StartButtons(text = "Hi" ,navigateToListScreen)
+        StartButtons(text = "Stuff" , { /*TODO*/ })
     }
     Row(
         modifier = Modifier
             .fillMaxSize()
-            .padding(bottom = 90.dp),
+            .padding(bottom = 60.dp),
 
         verticalAlignment = Alignment.Bottom,
         horizontalArrangement = Arrangement.Center
     ) {
-        StartButtons(text = "Stuff",navigateToListScreen)
+        StartButtons(text = "Surprise!", { /*TODO*/ })
         Spacer(modifier = Modifier.width(30.dp))
-        StartButtons(text = "More stuff",navigateToListScreen)
+        StartButtons(text = "More stuff", { /*TODO*/ })
     }
 }
 
@@ -106,21 +122,47 @@ fun StartButtons(
     ElevatedButton(
         onClick = onClick,
         modifier = Modifier
-            .shadow(3.dp, RoundedCornerShape(68.dp))
+            .shadow(4.dp, RoundedCornerShape(65.dp))
             .size(160.dp),
         shape = CircleShape,
-        border= BorderStroke(5.dp, Color.Black),
-        colors = ButtonDefaults.buttonColors(Color.LightGray)
+        //border= BorderStroke(2.dp, Color.Black),
+        colors = ButtonDefaults.buttonColors(Color.Black)
     )
     {
         Text(
             text = text,
             style = TextStyle(
                 fontSize = 20.sp,
+                fontWeight = FontWeight.Bold,
                 fontStyle = FontStyle.Italic,
-                color = Color.Black
-
+                fontFamily = FontFamily.Serif,
+                color = Color.Magenta,
+                textAlign = TextAlign.Center,
                 )
         )
     }
 }
+
+
+/*@Composable
+fun Header(text: String) {
+    val offset = Offset(5.0f, 10.0f)
+    Column(
+        modifier = Modifier
+            .padding(vertical = 20.dp)
+    ) {
+        Text(
+            text = text,
+            style = TextStyle(
+                fontSize = 36.sp,
+                color = Color.Black,
+                fontStyle = FontStyle.Italic,
+                fontFamily = FontFamily.Serif,
+                fontWeight = FontWeight.W900,
+                shadow = Shadow(
+                    color = Color.Gray, offset = offset, blurRadius = 3f
+                )
+            )
+        )
+    }
+}*/

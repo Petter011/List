@@ -9,17 +9,19 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
-import com.example.testtest.Screens.DetailScreen
-import com.example.testtest.Screens.DrinkScreen
-import com.example.testtest.Screens.ListScreen
-import com.example.testtest.Screens.ListViewModel
-import com.example.testtest.Screens.StartScreen
+import com.example.testtest.screens.DetailScreen
+import com.example.testtest.screens.DrinkScreen
+import com.example.testtest.screens.ListScreen
+import com.example.testtest.screens.ListViewModel
+import com.example.testtest.screens.SnakeScreen
+import com.example.testtest.screens.StartScreen
 
 object MainDestinations {
     const val LIST_SCREEN = "ListScreen"
     const val DETAIL_SCREEN = "DetailScreen"
     const val START_SCREEN = "StartScreen"
     const val DRINK_SCREEN = "DrinkScreen"
+    const val SNAKE_SCREEN = "SnakeScreen"
 }
 
 class Actions(navController: NavHostController) {
@@ -44,6 +46,10 @@ class Actions(navController: NavHostController) {
     val navigateToDrinkScreen: () -> Unit = {
         navController.navigate(MainDestinations.DRINK_SCREEN)
     }
+
+    val navigateToSnakeScreen: () -> Unit = {
+        navController.navigate(MainDestinations.SNAKE_SCREEN)
+    }
 }
 
 @Composable
@@ -56,7 +62,10 @@ fun SetupNavigation() {
     NavHost(navController, startDestination = MainDestinations.START_SCREEN) {
 
         composable(MainDestinations.START_SCREEN) {
-            StartScreen(actions.navigateToListScreen, actions.navigateToDrinkScreen)
+            StartScreen(
+                actions.navigateToListScreen,
+                actions.navigateToDrinkScreen,
+                actions.navigateToSnakeScreen)
         }
 
         composable(MainDestinations.LIST_SCREEN) {
@@ -65,6 +74,9 @@ fun SetupNavigation() {
 
         composable(MainDestinations.DRINK_SCREEN){
             DrinkScreen()
+        }
+        composable(MainDestinations.SNAKE_SCREEN){
+            SnakeScreen()
         }
 
         composable(

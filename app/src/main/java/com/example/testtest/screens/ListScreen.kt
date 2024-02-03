@@ -1,4 +1,4 @@
-package com.example.testtest.Screens
+package com.example.testtest.screens
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.background
@@ -18,7 +18,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
-import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material.icons.rounded.Edit
 import androidx.compose.material3.BottomSheetDefaults
 import androidx.compose.material3.Card
@@ -41,18 +40,14 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.Shadow
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontFamily
-import androidx.compose.ui.text.font.FontStyle
-import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.testtest.help_api.Header
 
 class ListViewModel : ViewModel() {
     val enteredText = mutableStateListOf<String>()
@@ -189,29 +184,6 @@ fun ListView(
     }
 }
 
-@Composable
-fun Header(text: String) {
-    val offset = Offset(5.0f, 10.0f)
-    Column(
-        modifier = Modifier
-            .padding(vertical = 20.dp)
-    ) {
-        Text(
-            text = text,
-            style = TextStyle(
-                fontSize = 36.sp,
-                color = Color.Black,
-                fontStyle = FontStyle.Italic,
-                fontFamily = FontFamily.Serif,
-                fontWeight = FontWeight.W900,
-                shadow = Shadow(
-                    color = Color.Gray, offset = offset, blurRadius = 3f
-                )
-            )
-        )
-    }
-}
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun BottomSheet(onDismiss: () -> Unit, onTextAdded: (String) -> Unit) {
@@ -268,6 +240,14 @@ fun AddStuff(
     }
 }
 
+
+
+@Preview(showBackground = true)
+@Composable
+fun ListScreenPreview() {
+    val listViewModel = remember { ListViewModel() }
+    ListScreen(navigateToDetailScreen = {}, listViewModel = listViewModel)
+}
 
 
 
